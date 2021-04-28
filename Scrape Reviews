@@ -1,0 +1,37 @@
+install.packages("rvest")
+library(rvest)
+
+#scrape ratings
+ratings <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+html_nodes(".verified-reviews") %>%
+html_text()
+ratings
+
+#scrape phone
+phone <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+html_nodes(".telephone-number") %>%
+html_text()
+phone
+
+#scrape business name
+name <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+html_nodes(".xmd-listing-company-name") %>%
+html_text()
+name
+
+
+
+  func <- function("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html"){
+  ratings <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+html_nodes(".verified-reviews") %>%
+html_text()
+phone <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+html_nodes(".telephone-number") %>%
+html_text()
+name <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+html_nodes(".xmd-listing-company-name") %>%
+html_text()
+  df <- cbind(scrape, scrape2, scrape3)
+  final_df <- as.data.frame(df)
+return(final_df)
+}

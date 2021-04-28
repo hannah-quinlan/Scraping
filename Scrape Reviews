@@ -1,37 +1,36 @@
 install.packages("rvest")
 library(rvest)
 
-#scrape ratings
-ratings <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
-html_nodes(".verified-reviews") %>%
-html_text()
-ratings
-
-#scrape phone
-phone <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
-html_nodes(".telephone-number") %>%
-html_text()
-phone
+install.packages("readr")
+library(readr)
 
 #scrape business name
 name <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
 html_nodes(".xmd-listing-company-name") %>%
 html_text()
 name
+company <- data.frame(unique(name), stringsAsFactors = FALSE)
+company
 
-
-
-  func <- function("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html"){
-  ratings <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+#scrape reviews
+reviewcount <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
 html_nodes(".verified-reviews") %>%
 html_text()
-phone <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+reviewcount
+reviews <- (as.numeric(gsub(".*?([0-9]+).*", "\\1", reviewcount)) )
+reviews <- data.frame(reviews, stringsAsFactors = TRUE)
+reviews
+
+#scrape phone
+tel <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
 html_nodes(".telephone-number") %>%
 html_text()
-name <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
-html_nodes(".xmd-listing-company-name") %>%
-html_text()
-  df <- cbind(scrape, scrape2, scrape3)
-  final_df <- as.data.frame(df)
-return(final_df)
-}
+tel
+phonenum <- substr(tel,11,25)
+phone <- data.frame(unique(phonenum), stringsAsFactors = FALSE)
+phone
+
+
+
+
+

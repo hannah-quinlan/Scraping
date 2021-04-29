@@ -4,8 +4,12 @@ library(rvest)
 install.packages("readr")
 library(readr)
 
+url <- ("https://www.homeadvisor.com/c.1.Akron.OH.-12001.html")
+id <- data.frame(url)
+id
+
 #scrape business name
-name <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+name <- read_html(url) %>%
 html_nodes(".xmd-listing-company-name") %>%
 html_text()
 name
@@ -13,7 +17,7 @@ company <- data.frame(unique(name), stringsAsFactors = FALSE)
 company
 
 #scrape reviews
-reviewcount <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+reviewcount <- read_html(url) %>%
 html_nodes(".verified-reviews") %>%
 html_text()
 reviewcount
@@ -22,7 +26,7 @@ reviews <- data.frame(reviews, stringsAsFactors = TRUE)
 reviews
 
 #scrape phone
-tel <- read_html("https://www.homeadvisor.com/c.Brick-Stone.Akron.OH.-12001.html") %>%
+tel <- read_html(url) %>%
 html_nodes(".telephone-number") %>%
 html_text()
 tel
@@ -30,6 +34,38 @@ phonenum <- substr(tel,11,25)
 phone <- data.frame(unique(phonenum), stringsAsFactors = FALSE)
 phone
 
+#bind dataframes
+scrape <- cbind(reviews[1:20,], phone[1:20,], company[1:20,],id)
+colnames(scrape) <- c("reviews", "phone", "company","url")
+scrape
+_______________________________________________________________________________________________
+#bring in URLs, Geos, and Codes
+library(readxl)
+HomeAdvisor_URL <- read_excel("HomeAdvisor Scrape.xlsm")
+View(HomeAdvisor_URL)
+library(readxl)
+HomeAdvisor_Codes <- read_excel("HomeAdvisor Scrape.xlsm",
+sheet = "HA Category_Codes")
+View(HomeAdvisor_Codes)
+library(readxl)
+HomeAdvisor_Scrape <- read_excel("HomeAdvisor Scrape.xlsm",
+sheet = "Top Geos by Pop", col_types = c("skip",
+"skip", "skip", "skip", "skip", "skip",
+"skip", "skip", "skip", "numeric",
+"numeric", "numeric", "numeric",
+"numeric", "numeric", "numeric",
+"numeric", "text", "text", "text",
+"text", "numeric"))
+View(HomeAdvisor_Scrape)
+HomeAdvisor_Codes = subset(HomeAdvisor_Codes,select = c(1,2))
+HomeAdvisor_Geos = subset(HomeAdvisor_Scrape, select = -c(1:6))
+View(HomeAdvisor_Geos)
+
+#Convert to factors
+HomeAdvisor_Geos$Region = as.factor(HomeAdvisor_Geos)
+HomeAdvisor_Geos$Region = as.factor(HomeAdvisor_Geos$Region)
+HomeAdvisor_Geos$Division = as.factor(HomeAdvisor_Geos$Division)
+HomeAdvisor_Codes$Category = as.factor(HomeAdvisor_Codes$Category)
 
 
 

@@ -1,10 +1,10 @@
 install.packages("rvest")
+install.packages("readr")
+
+library(readr)
 library(rvest)
 
-install.packages("readr")
-library(readr)
-
-url <- ("https://www.homeadvisor.com/c.1.Akron.OH.-12001.html")
+url <- ("https://www.homeadvisor.com/c.1.Los Angeles.CA.-12002.html")
 id <- data.frame(url)
 id
 
@@ -37,9 +37,49 @@ phone
 #bind dataframes
 scrape <- cbind(reviews[1:20,], phone[1:20,], company[1:20,],id)
 colnames(scrape) <- c("reviews", "phone", "company","url")
-scrape
+View(scrape)
 
-write.csv(scrape,"C:\\Users\\hquin\\OneDrive\\Desktop\\Scrape_Test.csv", row.names = FALSE)
+url
+
+write.csv(scrape,"C:\\Users\\hquin\\OneDrive\\Desktop\\Scrape_Testing.csv", row.names = FALSE)
+-------------------------------------------------------------------------------------------------------------------------
+#Showing risks below
+url <- ("https://www.homeadvisor.com/c.1.Los Angeles.CA.-12001.html")
+id <- data.frame(url)
+id
+
+#scrape business name
+name <- read_html(url) %>%
+html_nodes(".xmd-listing-company-name") %>%
+html_text()
+name
+company <- data.frame(unique(name), stringsAsFactors = FALSE)
+company
+
+#scrape reviews
+reviewcount <- read_html(url) %>%
+html_nodes(".verified-reviews") %>%
+html_text()
+reviewcount
+reviews <- (as.numeric(gsub(".*?([0-9]+).*", "\\1", reviewcount)) )
+reviews <- data.frame(reviews, stringsAsFactors = TRUE)
+reviews
+
+#scrape phone
+tel <- read_html(url) %>%
+html_nodes(".telephone-number") %>%
+html_text()
+tel
+phonenum <- substr(tel,11,25)
+phone <- data.frame(unique(phonenum), stringsAsFactors = FALSE)
+phone
+
+#bind dataframes
+scrape <- cbind(reviews[1:20,], phone[1:20,], company[1:20,],id)
+colnames(scrape) <- c("reviews", "phone", "company","url")
+View(scrape)
+
+url
 _______________________________________________________________________________________________
 #bring in URLs, Geos, and Codes
 library(readxl)

@@ -38,6 +38,8 @@ phone
 scrape <- cbind(reviews[1:20,], phone[1:20,], company[1:20,],id)
 colnames(scrape) <- c("reviews", "phone", "company","url")
 scrape
+
+write.csv(scrape,"C:\\Users\\hquin\\OneDrive\\Desktop\\Scrape_Test.csv", row.names = FALSE)
 _______________________________________________________________________________________________
 #bring in URLs, Geos, and Codes
 library(readxl)

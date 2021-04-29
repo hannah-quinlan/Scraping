@@ -53,6 +53,8 @@ url
 write.csv(scrape,"C:\\Users\\hquin\\OneDrive\\Desktop\\Scrape_Tester.csv", row.names = FALSE)
 -------------------------------------------------------------------------------------------------------------------------
 #Testing for risks and mitigation below
+#Top company is new and has no ratings
+
 url <- ("https://www.homeadvisor.com/c.1.Los Angeles.CA.-12001.html")
 id <- data.frame(url)
 id
@@ -98,6 +100,7 @@ colnames(scrape) <- c("reviews", "phone", "company","ratings", "url")
 View(scrape)
 
 #if ratings are "NA" then reviews need to move down 1 cell to realign
+#Write VBA code to move cells down if this occurs after final output
 
 url
 _______________________________________________________________________________________________

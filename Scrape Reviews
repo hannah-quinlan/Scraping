@@ -117,18 +117,28 @@ View(scrape)
 url
 
 ------------------------------------------------------------------------------------
-list_cities <- as.list(Us_Cities)
+list_cities <- as.list(us_cities)
 for (city in list_cities) {
   print(paste0(city))
  }
   for (i in 12000:12085) {
     print(paste0("https://www.homeadvisor.com/c.1.", city, ".-", i, ".html"))
     url <- paste0("https://www.homeadvisor.com/c.1.", city, ".-", i, ".html")
-    id <- data.frame(url)
-id
-
+    }
+    
+    
+    
+    
+    
+function.for <- function(){
+for (i in 12000:12085) {
+    print(paste0("https://www.homeadvisor.com/c.1.", city, ".-", i, ".html"))
+    url <- paste0("https://www.homeadvisor.com/c.1.", city, ".-", i, ".html")
+    }}
+    
+   
 #scrape business name
-name <- read_html(url) %>%
+name <- read_html(function.for())%>%
 html_nodes(".xmd-listing-company-name") %>%
 html_text()
 name
@@ -144,15 +154,6 @@ reviews <- (as.numeric(gsub(".*?([0-9]+).*", "\\1", reviewcount)) )
 reviews <- data.frame(reviews, stringsAsFactors = TRUE)
 reviews
 
-#scrape phone
-tel <- read_html(url) %>%
-html_nodes(".telephone-number") %>%
-html_text()
-tel
-phonenum <- substr(tel,11,25)
-phone <- data.frame(unique(phonenum), stringsAsFactors = FALSE)
-phone
-
 #scrape ratings (for misalignment risk mitigation)
 rate <- read_html(url) %>%
 html_nodes(".ratings") %>%
@@ -167,10 +168,7 @@ scrape <- cbind(reviews[1:20,], phone[1:20,], company[1:20,], ratings[1:20,], id
 colnames(scrape) <- c("reviews", "phone", "company","ratings", "url")
 View(scrape)
 
-export
-
  }
-
 }
 
  

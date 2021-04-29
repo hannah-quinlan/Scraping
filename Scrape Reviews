@@ -41,7 +41,7 @@ View(scrape)
 
 url
 
-write.csv(scrape,"C:\\Users\\hquin\\OneDrive\\Desktop\\Scrape_Testing.csv", row.names = FALSE)
+write.csv(scrape,"C:\\Users\\hquin\\OneDrive\\Desktop\\Scrape_Tests.csv", row.names = FALSE)
 -------------------------------------------------------------------------------------------------------------------------
 #Showing risks below
 url <- ("https://www.homeadvisor.com/c.1.Los Angeles.CA.-12001.html")

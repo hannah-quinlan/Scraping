@@ -4,17 +4,19 @@ install.packages("readr")
 library(readr)
 library(rvest)
 library(dplyr)
+library(readxl)
 
 #bring in cities and category codes
 
-library(readxl)
-HomeAdvisor_Codes <- read_excel("HomeAdvisor Scrape.xlsm",
-sheet = "HA Category_Codes")
-View(HomeAdvisor_Codes)
+category_codes <- read_excel("HomeAdvisor Scrape.xlsm",
+sheet = "HA Category_Codes", col_types = c("skip",
+"numeric", "skip", "skip", "skip",
+"skip"))
+View(category_codes)
 
-US_Cities <- read_excel("HomeAdvisor Scrape.xlsm",
-sheet = "US_Cities")
-View(US_Cities)
+us_cities <- read_excel("HomeAdvisor Scrape.xlsm",
+sheet = "us_cities")
+View(us_cities)
 
 url <- ("https://www.homeadvisor.com/c.1.Los Angeles.CA.-12002.html")
 id <- data.frame(url)
@@ -117,6 +119,9 @@ View(scrape)
 url
 
 ------------------------------------------------------------------------------------
+
+LOOPS
+
 list_cities <- as.list(us_cities)
 for (city in list_cities) {
   print(paste0(city))
@@ -124,12 +129,48 @@ for (city in list_cities) {
   for (i in 12000:12085) {
     print(paste0("https://www.homeadvisor.com/c.1.", city, ".-", i, ".html"))
     url <- paste0("https://www.homeadvisor.com/c.1.", city, ".-", i, ".html")
-    }
+    
+#scrape reviews
+reviewcount <- read_html(url) %>%
+html_nodes(".verified-reviews") %>%
+html_text()
+reviewcount
+reviews <- (as.numeric(gsub(".*?([0-9]+).*", "\\1", reviewcount)) )
+reviews <- data.frame(reviews, stringsAsFactors = TRUE)
+reviews
+
+#scrape ratings (for misalignment risk mitigation)
+rate <- read_html(url) %>%
+html_nodes(".ratings") %>%
+html_text()
+rate
+ratings <- (as.numeric(gsub(".*?([0-9]+).*", "\\1", rate)) )
+ratings <- data.frame(ratings, stringsAsFactors = TRUE)
+ratings
+
+#bind dataframes
+scrape <- cbind(reviews[1:20,], phone[1:20,], company[1:20,], ratings[1:20,], id)
+colnames(scrape) <- c("reviews", "phone", "company","ratings", "url")
+View(scrape)
+
+ }
+}
     
     
+combine = do.call(rbind, args = url_list)    
     
-    
-    
+ 
+ 
+ 
+ 
+ 
+### EXTRA SHIT DOWN HERE
+ 
+ 
+ 
+ 
+ 
+ 
 function.for <- function(){
 for (i in 12000:12085) {
     print(paste0("https://www.homeadvisor.com/c.1.", city, ".-", i, ".html"))

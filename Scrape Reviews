@@ -148,6 +148,14 @@ ratings <- (as.numeric(gsub(".*?([0-9]+).*", "\\1", rate)) )
 ratings <- data.frame(ratings, stringsAsFactors = TRUE)
 ratings
 
+#scrape business name
+name <- read_html(function.for())%>%
+html_nodes(".xmd-listing-company-name") %>%
+html_text()
+name
+company <- data.frame(unique(name), stringsAsFactors = FALSE)
+company
+
 #bind dataframes
 scrape <- cbind(reviews[1:20,], phone[1:20,], company[1:20,], ratings[1:20,], id)
 colnames(scrape) <- c("reviews", "phone", "company","ratings", "url")

@@ -95,7 +95,7 @@ for (city in list_cities) {
   combined_city <- do.call(rbind, args = df_list)
   
   # Export each City to Excel
-  # KR note - change path to wherever you save this out. 
+  #change path to wherever you save this out. 
   filepath_name <- ("G:/Shared drives/3S Home Team Drive/Business Development/Research/ha_leads.xlsx")
   export_excel(combined_city, filepath_name, paste0(city))
 }

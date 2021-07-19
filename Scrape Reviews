@@ -45,7 +45,8 @@ list_cities <- as.list(us_cities$city)
 for (city in list_cities) {
   print(paste0(city))
   df_list <- c()
-  # Tested on 12001-12002 but you can put in the full list of category ids
+  
+# Tested on 12001-12002 but you can put in the full list of category ids
   for (i in 12001:12010) {
     url <- paste0("https://www.homeadvisor.com/c.1.", city, ".-", i, ".html")
     #scrape business name

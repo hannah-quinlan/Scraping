@@ -1,0 +1,76 @@
+  
+install.packages("rvest")
+install.packages("readr")
+
+###################################
+
+# Libraries
+library(rvest)
+library(readr)  
+library(dplyr)
+library(readxl)   
+    
+# This function is what you use to save out Excel
+## Define function to overwrite existing Excel sheet
+    export_excel = function(data,filepath="G:/Shared drives/3S Home Team Drive/Business Development/Research/modernize_leads.xlsx", sheetname = Sheet1) {
+      
+      # If file exists, open it; if it does not exist, create it
+      if (file.exists(filepath)) {
+        wb = openxlsx::loadWorkbook(filepath)
+        
+        # If sheet already exists, delete it
+        if (sheetname %in% openxlsx::getSheetNames(filepath)) {
+          openxlsx::removeWorksheet(wb, sheetname)
+        }
+      } else {
+        wb = openxlsx::createWorkbook()
+      }
+      
+      # Write out the data to the worksheet
+      openxlsx::addWorksheet(wb, sheetname)
+      openxlsx::writeData(wb, sheet = sheetname, data, colNames = TRUE)
+      
+      # Save out updated Excel file
+      openxlsx::saveWorkbook(wb, filepath, overwrite = TRUE)
+    }
+
+# Read in Excel
+# Change input_name to path where you store the orig document with the us city names
+input_name <- (file_path="G:/Shared drives/3S Home Team Drive/Business Development/Research/us_cities2.xlsx")
+us_cities <- read_excel(input_name, sheet = "us_cities")
+
+#I tested on 3 cities, but take out this row and it will go through all cities. 
+us_cities <- us_cities %>% mutate(n = row_number()) %>% filter(n > 165) %>% select(-n)
+
+list_cities <- as.list(us_cities$city)
+for (city in list_cities) {
+  print(paste0(city))
+  df_list <- c()
+  
+# Tested on 12001-12002 but you can put in the full list of category ids
+  for (i in 12001:12001) {
+    url <- paste0("https://www.modernize.com/", city, "/window-installation-and-repair")
+    #scrape business name
+    name <- read_html(url) %>%
+      html_nodes("a") %>%
+      html_text()
+      name
+    
+    company <- as.data.frame(name) %>%
+      distinct() %>%
+      mutate(n = row_number())
+    
+    
+    df_list[[i]] <- name
+  }
+  
+  # Apply rbind across the entire list (stacks all the numeric datasets on top of each other)
+  combined_city <- do.call(rbind, args = df_list)
+  
+  # Export each City to Excel
+  #change path to wherever you save this out. 
+  filepath_name <- ("G:/Shared drives/3S Home Team Drive/Business Development/Research/modernize_leads.xlsx")
+  export_excel(combined_city, filepath_name, paste0(city))
+}
+
+

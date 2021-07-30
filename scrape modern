@@ -3,6 +3,8 @@ install.packages("rvest")
 install.packages("readr")
 
 ###################################
+#I tested on 3 cities, but take out this row and it will go through all cities. 
+us_cities <- us_cities %>% mutate(n = row_number()) %>% filter(n > 165) %>% select(-n)
 
 # Libraries
 library(rvest)
@@ -12,7 +14,7 @@ library(readxl)
     
 # This function is what you use to save out Excel
 ## Define function to overwrite existing Excel sheet
-    export_excel = function(data,filepath="G:/Shared drives/3S Home Team Drive/Business Development/Research/modernize_leads.xlsx", sheetname = Sheet1) {
+    export_excel = function(data,filepath="G:/Shared drives/3S Home Team Drive/Business Development/Research/modernize_leads3.xlsx", sheetname = Sheet1) {
       
       # If file exists, open it; if it does not exist, create it
       if (file.exists(filepath)) {
@@ -40,7 +42,7 @@ input_name <- (file_path="G:/Shared drives/3S Home Team Drive/Business Developme
 us_cities <- read_excel(input_name, sheet = "us_cities")
 
 #I tested on 3 cities, but take out this row and it will go through all cities. 
-us_cities <- us_cities %>% mutate(n = row_number()) %>% filter(n > 165) %>% select(-n)
+us_cities <- us_cities %>% mutate(n = row_number()) %>% filter(n > 0) %>% select(-n)
 
 list_cities <- as.list(us_cities$city)
 for (city in list_cities) {
@@ -49,7 +51,7 @@ for (city in list_cities) {
   
 # Tested on 12001-12002 but you can put in the full list of category ids
   for (i in 12001:12001) {
-    url <- paste0("https://www.modernize.com/", city, "/window-installation-and-repair")
+    url <- paste0("https://www.modernize.com/", city, "/Aluminum-Window-Companies")
     #scrape business name
     name <- read_html(url) %>%
       html_nodes("a") %>%
@@ -69,7 +71,7 @@ for (city in list_cities) {
   
   # Export each City to Excel
   #change path to wherever you save this out. 
-  filepath_name <- ("G:/Shared drives/3S Home Team Drive/Business Development/Research/modernize_leads.xlsx")
+  filepath_name <- ("G:/Shared drives/3S Home Team Drive/Business Development/Research/modernize_leads3.xlsx")
   export_excel(combined_city, filepath_name, paste0(city))
 }
 

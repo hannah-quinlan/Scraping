@@ -50,8 +50,11 @@ for (pages in list_pages) {
   for (i in 12001:12001) {
 url <- paste0("https://www.healthline.com/",pages)
 #scrape url
+
+url <- paste0("https://www.healthline.com/health/multiple-sclerosis/treatment")
 name <- read_html(url) %>%
     html_nodes(css="[href]")
+    name
     
     df_list[[i]] <- name
   }

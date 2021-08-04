@@ -11,7 +11,7 @@ library(readxl)
     
 # This function is what you use to save out Excel
 ## Define function to overwrite existing Excel sheet
-    export_excel = function(data,filepath="G:/My Drive/healthline_scrapes.xlsx", sheetname = Sheet1) {
+    export_excel = function(data,filepath="G:/My Drive/health_scraping/healthline_scrapes.xlsx", sheetname = Sheet1) {
       
       # If file exists, open it; if it does not exist, create it
       if (file.exists(filepath)) {
@@ -64,6 +64,6 @@ link <- read_html(url) %>%
   
   # Export each page to Excel
   #change path to wherever you save this out. 
-  filepath_name <- ("G:/My Drive/healthline_scrapes.xlsx")
+  filepath_name <- ("G:/My Drive/health_scraping/healthline_scrapes.xlsx")
   export_excel(combined_pages, filepath_name, paste0(pages))
 }

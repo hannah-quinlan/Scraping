@@ -52,9 +52,9 @@ url <- paste0("https://www.healthline.com/",pages)
 #scrape url
 
 url <- paste0("https://www.healthline.com/health/multiple-sclerosis/treatment")
-name <- read_html(url) %>%
+link <- read_html(url) %>%
     html_nodes(css="[href]")
-    name
+  link
     
     df_list[[i]] <- name
   }

@@ -2,6 +2,7 @@ install.packages("rvest")
 install.packages("readr")
 install.packages("dplyr")
 install.packages("readxl")
+install.packages("openxlsx")
 
 ###################################
 
@@ -10,10 +11,11 @@ library(rvest)
 library(readr)  
 library(dplyr)
 library(readxl)   
+library(openxlsx)
     
 # This function is what you use to save out Excel
 ## Define function to overwrite existing Excel sheet
-    export_excel = function(data,filepath="G:/My Drive/bark_leads.xlsx", sheetname = Sheet1) {
+    export_excel = function(data,filepath="G:/My Drive/bark_leads-pest.xlsx", sheetname = Sheet1) {
       
       # If file exists, open it; if it does not exist, create it
       if (file.exists(filepath)) {
@@ -40,9 +42,6 @@ library(readxl)
 input_name <- (file_path="G:/Shared drives/3S Home Team Drive/Business Development/Research/uk_cities.xlsx")
 uk_cities <- read_excel(input_name, sheet = "uk_cities")
 
-input_cat <- (file_path="G:/Shared drives/3S Home Team Drive/Business Development/Research/bark_categories.xlsx")
-bark_categories <- read_excel(input_cat, sheet = "categories")
-
 #I tested on 3 cities, but take out this row and it will go through all cities. 
 #us_cities <- us_cities %>% mutate(n = row_number()) %>% filter(n > 165) %>% select(-n)
 
@@ -63,23 +62,26 @@ for (city in list_cities) {
       distinct() %>%
       mutate(n = row_number())
     
+ #scrape city
+    place <- read_html(url) %>%
+      html_nodes(".h2") %>%
+      html_text()
+    place <- as.data.frame(city) %>% 
+       distinct() %>%
+      mutate(n = row_number())
     
     #scrape reviews
-    reviewcount <- read_html(url) %>%
-      html_nodes(".review-score") %>%
+    cat <- read_html(url) %>%
+      html_nodes(".h2") %>%
       html_text()
-    reviews <- (as.numeric(gsub(".*?([0-9]+).*", "\\1", reviewcount)) )
-    reviews <- data.frame(reviews, stringsAsFactors = TRUE) %>% 
-      filter(!is.na(reviews)) %>% 
+    cat <- as.data.frame(cat) %>% 
+       distinct() %>%
       mutate(n = row_number())
-  
-    scrape <- 
-      select(name, reviews) %>%
-      mutate(url = url, 
-             city = city
-            )
+    
+    scrape <- data.frame(company, city, url)
     
     df_list[[i]] <- scrape
+ 
   }
   
   # Apply rbind across the entire list (stacks all the numeric datasets on top of each other)
@@ -87,9 +89,6 @@ for (city in list_cities) {
   
   # Export each City to Excel
   #change path to wherever you save this out. 
-  filepath_name <- ("G:/Shared drives/3S Home Team Drive/Business Development/Research/bark_leads.xlsx")
+  filepath_name <- ("G:/My Drive/bark_leads-pest.xlsx")
   export_excel(combined_city, filepath_name, paste0(city))
 }
-
-
-

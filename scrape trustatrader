@@ -39,7 +39,7 @@ library(openxlsx)
 
 # Read in Excel
 # Change input_name to path where you store the orig document with the us city names
-input_name <- (file_path="G:/Shared drives/3S Home Team Drive/Business Development/Research/uk_cities3.xlsx")
+input_name <- (file_path="G:/Shared drives/3S Home Team Drive/Business Development/Research/uk_cities2.xlsx")
 uk_cities <- read_excel(input_name, sheet = "uk_cities")
 
 #I tested on 3 cities, but take out this row and it will go through all cities. 

@@ -15,7 +15,7 @@ library(openxlsx)
     
 # This function is what you use to save out Excel
 ## Define function to overwrite existing Excel sheet
-    export_excel = function(data,filepath="G:/My Drive/bark_leads-pest.xlsx", sheetname = Sheet1) {
+    export_excel = function(data,filepath="G:/My Drive/bark-london.xlsx", sheetname = Sheet1) {
       
       # If file exists, open it; if it does not exist, create it
       if (file.exists(filepath)) {
@@ -52,7 +52,7 @@ for (city in list_cities) {
  
 # Tested on 12001-12002 but you can put in the full list of category ids
   for (i in 12001:12002) {
-    url <- paste0("https://www.bark.com/en/gb/", "pest-control/", city, "/")
+    url <- paste0("https://www.bark.com/en/gb/", city, "/london/")
     #scrape business name
     name <- read_html(url) %>%
       html_nodes(".popular-seller-company-name") %>%
@@ -60,22 +60,6 @@ for (city in list_cities) {
     
     company <- as.data.frame(name) %>%
       distinct() %>%
-      mutate(n = row_number())
-    
- #scrape city
-    place <- read_html(url) %>%
-      html_nodes(".h2") %>%
-      html_text()
-    place <- as.data.frame(city) %>% 
-       distinct() %>%
-      mutate(n = row_number())
-    
-    #scrape reviews
-    cat <- read_html(url) %>%
-      html_nodes(".h2") %>%
-      html_text()
-    cat <- as.data.frame(cat) %>% 
-       distinct() %>%
       mutate(n = row_number())
     
     scrape <- data.frame(company, city, url)
@@ -89,6 +73,6 @@ for (city in list_cities) {
   
   # Export each City to Excel
   #change path to wherever you save this out. 
-  filepath_name <- ("G:/My Drive/bark_leads-pest.xlsx")
+  filepath_name <- ("G:/My Drive/bark-london.xlsx")
   export_excel(combined_city, filepath_name, paste0(city))
 }

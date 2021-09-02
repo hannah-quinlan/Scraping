@@ -52,7 +52,7 @@ for (city in list_cities) {
  
 # Tested on 12001-12002 but you can put in the full list of category ids
   for (i in 12001:12002) {
-    url <- paste0("https://www.ratedpeople.com/", city,"london")
+    url <- paste0("https://www.ratedpeople.com/local-", city,"/london")
     
     #scrape business name
     name <- read_html(url) %>%

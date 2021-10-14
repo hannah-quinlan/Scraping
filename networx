@@ -51,7 +51,7 @@ for (city in list_cities) {
     url <- paste0("https://www.networx.com/", "remodeling-contractors/",city)
     #scrape business name
     name <- read_html(url) %>%
-      html_nodes("h3.contractor-name") %>%
+      html_nodes(".contractor-name") %>%
       html_text()
       name
     
@@ -59,8 +59,9 @@ for (city in list_cities) {
       distinct() %>%
       mutate(n = row_number())
     
+      scrape <- data.frame(company, city, url)
     
-    df_list[[i]] <- name
+    df_list[[i]] <- scrape
   }
   
   # Apply rbind across the entire list (stacks all the numeric datasets on top of each other)

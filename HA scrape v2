@@ -11,7 +11,7 @@ library(readxl)
     
 # This function is what you use to save out Excel
 ## Define function to overwrite existing Excel sheet
-    export_excel = function(data,filepath="G:/Shared drives/3S Home Team Drive/Business Development/Research/ha_leads_solar.xlsx", sheetname = Sheet1) {
+    export_excel = function(data,filepath="G:/Shared drives/3S Home Team Drive/Business Development/Research/ha_leads_SC_Windows.xlsx", sheetname = Sheet1) {
       
       # If file exists, open it; if it does not exist, create it
       if (file.exists(filepath)) {
@@ -35,8 +35,8 @@ library(readxl)
 
 # Read in Excel
 # Change input_name to path where you store the orig document with the us city names
-input_name <- (file_path="G:/Shared drives/3S Home Team Drive/Business Development/Research/us_cities_CvK.xlsx")
-us_cities <- read_excel(input_name, sheet = "us_cities_CvK")
+input_name <- (file_path="G:/Shared drives/3S Home Team Drive/Business Development/Research/us_cities_SC.xlsx")
+us_cities <- read_excel(input_name, sheet = "us_cities_SC")
 
 #I tested on 3 cities, but take out this row and it will go through all cities. 
 #us_cities <- us_cities %>% mutate(n = row_number()) %>% filter(n > 165) %>% select(-n)
@@ -47,8 +47,8 @@ for (city in list_cities) {
   df_list <- c()
   
 # Tested on 12001-12002 but you can put in the full list of category ids
-  for (i in 14820:14820) {
-    url <- paste0("https://www.homeadvisor.com/c.Solar.", city, ".-", i, ".html")
+  for (i in 12080:12080) {
+    url <- paste0("https://www.homeadvisor.com/c.Windows.", city, ".-", i, ".html")
     
     #scrape business name
     name <- read_html(url) %>%
@@ -67,7 +67,7 @@ for (city in list_cities) {
   
   # Export each City to Excel
   #change path to wherever you save this out. 
-  filepath_name <- ("G:/Shared drives/3S Home Team Drive/Business Development/Research/ha_leads_solar.xlsx")
+  filepath_name <- ("G:/Shared drives/3S Home Team Drive/Business Development/Research/ha_leads_SC_Windows.xlsx")
   export_excel(combined_city, filepath_name, paste0(city))
 }
 
